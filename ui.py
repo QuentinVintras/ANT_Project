@@ -26,7 +26,14 @@ class InsectesUI(QtWidgets.QMainWindow):
         # puis on indique à la fenêtre Qt maintenant initialisée qu'elle
         # doit suivre les directives décrites dans QtDesigner et sauvegardées
         # dans le fichier .ui créé à l'étape 1 du sujet.  
-        self.ui = uic.loadUi('METTRE_ICI_LE_NOM_DU_FICHIER.UI', self)
+        self.ui = uic.loadUi('interface.ui', self)
+        self.ecosys = Ecosysteme(nb_ins, nb_tour, 40, 80)
+        self.ui.bouton_sim.clicked.connect(self.simuler)
+
+
+    def simuler(self):
+        print("simulation running")
+        self.ecosys.simuler()
 
 if __name__ == "__main__":
     # on créé une nouvelle application Qt
