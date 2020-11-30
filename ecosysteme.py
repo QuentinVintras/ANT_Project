@@ -4,8 +4,6 @@ import numpy as np
 from numpy.random import randint
 import time
 import matplotlib.pyplot as plt
-
-# il est inutile d'importer Animal :
 from animaux import Fourmi
 
 """
@@ -55,72 +53,7 @@ class Ecosysteme(list):
         for i in range(xmin, xmax):
             v.append(self.__plateau[i][ymin:ymax])
         return v, xmin, ymin
-    
-    def __str__(self):
-        """Affiche le plateau de jeu en mode texte suivant les codes couleur
-        définis dans les sous classes de ''Terrain'' et les caractères définis
-        dans les sous classes de ''Animal''.
-        
-        Paramètres
-        ----------
-        Aucun
-        
-        Renvoie
-        -------
-        s: string
-            La chaîne de caractères qui sera affichée via ''print''
-            
-        Notes 
-        ----- 
-        Pour l'affichage en couleur, le terminal utilisé pour
-        l'affichage devra savoir gérer les codes d'échappement bash.
-        """
 
-        # decommenter la ligne choisie :
-        #return self.strCol()  # Pour l'affichage en couleur
-        return self.str2()     # Pour l'affichage sur deux caractères
-
-    def strCol(self):
-        """
-        Conversion en chaîne pour affichage sur terminal bash en couleur
-        """
-        pos = {}
-        for ins in self:
-            pos[ins.coords]=ins.car()
-        s = ""
-        for i in range(self.__xmax):
-            for j in range(self.__ymax):
-                if self.case(i,j)==1:
-                    s += "\x1b[102;31m"
-                else:
-                    s += "\x1b[43;31m"
-                if (i, j) in pos:
-                    s += pos[(i,j)]
-                else:
-                    s += "."
-            s += "\x1b[0m\n"
-        return s
-    
-    def str2(self):
-        """
-        Conversion en chaîne avec deux caractères par case.
-        """
-        pos = {}
-        for ins in self:
-            pos[ins.coords]=ins.car()
-        s = ""
-        for i in range(self.__xmax):
-            for j in range(self.__ymax):
-                if self.case(i,j)==1:
-                    s += "#"
-                else:
-                    s += "."
-                if (i, j) in pos:
-                    s += pos[(i,j)]
-                else:
-                    s += " "
-            s += "\n"
-        return s
 
     def nbs(self):
         nbc = 0
@@ -144,8 +77,6 @@ class Ecosysteme(list):
         -------
         Rien
         """
-        
-        # rnd.shuffle(self)    Utile si gestion des collisions
         for ins in self:  # fonctionne car Ecosysteme descend de list
             ins.bouger()
             ins.manger()
@@ -180,17 +111,12 @@ class Ecosysteme(list):
             #print(self)
             nbc, nbf = self.nbs()
             print("Cigales {}\tFourmis {}\t".format(nbc, nbf))
-#            liste_cig.append(nbc)
-#            liste_fou.append(nbf)
-#            time.sleep(0.03)
-#        plt.plot(liste_fou, 'r', label="Fourmis")
-#        plt.plot(liste_cig, 'g', label="Cigales")
-#        plt.legend(loc='upper right')
-#        plt.show()
-        
+
+
+
 if __name__ == "__main__":
     nbins = 300
     nbtour = 150
-    ecosys = Ecosysteme(nbins,nbtour,60,30,40)
+    ecosys = Ecosysteme(nbins,nbtour,80,30,40)
     print(ecosys)
     ecosys.simuler()

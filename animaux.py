@@ -4,7 +4,6 @@ import numpy as np
 from numpy.random import randint
 import sys
 from abc import ABC, abstractmethod
-# from dprint import dprint
 
 def sign(x):
     if x<0:
@@ -161,7 +160,7 @@ class Animal(ABC):
         """
         sante: float
             Le niveau de santé de l'animal. Si ce niveau arrive à 0 l'animal
-            est marqué comme mort et sera retiré du plateau de jeu
+            est marqué comme mort et sera retiré du plateau
         """
         return self.__sante
     
