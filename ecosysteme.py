@@ -18,6 +18,7 @@ class Ecosysteme(list):
         self.__xmax = xmax
         self.__ymax = ymax
         self.__plateau = []
+        self.list_nour = []
         for i in range(xmax):
             self.__plateau.append([0]*ymax)
         self.nbtour =  nbt
