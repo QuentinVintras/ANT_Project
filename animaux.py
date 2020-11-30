@@ -187,36 +187,3 @@ class Fourmi(Animal):
             self.mouvAlea()
         else:
             self.mouvNour()
-    
-class Cigale(Animal):
-    def __init__(self, x, y, eco):      # *args, **kwargs):
-        """Le constructeur de la classe Cigale.
-        x, y : int
-
-        Note : Les lignes commentées dans le code source sont des
-        façons alternatives d'invoquer le constructeur de la
-        classe-mère.
-        """
-        # super().__init__(*args, **kwargs)
-        # super().__init__(args[0], args[1])
-        super().__init__(x, y, eco)
-        self.sante = self._max
-    
-    def car(self):
-        return 'C'
-
-    def bouger(self):
-        """
-        Probabilité 1/3 de danser, 1/3 de chanter, 1/3 d'avoir
-        un comportement semblable à une Fourmi.
-        """
-        action = randint(3)
-        if action == 1:
-            print("Je danse")
-        elif action == 2:
-            print("Je chante")
-        elif self.sante>=8:
-            self.mouvAlea()
-        else:
-            self.mouvNour()
-

@@ -6,7 +6,7 @@ import time
 import matplotlib.pyplot as plt
 
 # il est inutile d'importer Animal :
-from animaux import Fourmi, Cigale
+from animaux import Fourmi
 
 """
 Ce module contient la définition de la classe principale servant à gérer le jeu
@@ -24,10 +24,7 @@ class Ecosysteme(list):
             self.__plateau.append([0]*ymax)
         self.nbtour =  nbt
         for i in range(nb_ins):
-            if randint(0, 3)==0:
-                self.append(Fourmi(randint(0, xmax), randint(0, ymax), self))
-            else:
-                self.append(Cigale(randint(0, xmax), randint(0, ymax), self))
+            self.append(Fourmi(randint(0, xmax), randint(0, ymax), self))
         if nbNour>xmax*ymax:
             raise(ValueError("Trop de nourriture"))
         else:
