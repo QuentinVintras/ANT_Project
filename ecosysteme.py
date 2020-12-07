@@ -34,6 +34,7 @@ class Ecosysteme(list):
                     x = randint(xmax)
                     y = randint(ymax)
                 self.__plateau[x][y] = 1
+                self.list_nour.append((x,y))
 
     @property
     def dims(self):

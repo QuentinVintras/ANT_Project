@@ -106,10 +106,9 @@ class InsectesUI(QtWidgets.QMainWindow):
 
             # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
             qp.drawImage(ins.x,ins.y, img)
-        print(self.ecosys.list_nour)
         for food in self.ecosys.list_nour:
-            d,x,y = food
-            qp.drawImage(x,y,QtGui.QImage(Nourriture.png))
+            x,y = food
+            qp.drawImage(x,y,QtGui.QImage("Nourriture1.png"))
         # on informe le peintre qu'on a fini
         self.painter.end()
 

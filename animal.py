@@ -95,8 +95,8 @@ class Animal(ABC):
                        self.y+randint(-3,4))
 
     def mouvNour(self):
-        v, xmin, ymin = self._eco.vue(self.x, self.y, 4)
-        liste_nour = self._eco.list_nour
+        v, xmin, ymin = self._eco.vue(self.x, self.y, 20)
+        liste_nour = []
         for i in range(len(v)):
             for j in range(len(v[0])):
                 if v[i][j] == 1:
@@ -104,7 +104,6 @@ class Animal(ABC):
                     cy = j+ymin
                     d = max(abs(cx-self.x), abs(cy-self.y))
                     liste_nour.append((d, cx, cy))
-        self._eco.list_nour = liste_nour
         if liste_nour == []:
             self.mouvAlea()
         else:
