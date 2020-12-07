@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import randint
 import time
 import matplotlib.pyplot as plt
-from animaux import Fourmi
+from animal import Fourmi
 
 """
 Ce module contient la définition de la classe principale servant à gérer le jeu
