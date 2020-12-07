@@ -14,6 +14,7 @@ def sign(x):
         return 1
 
 
+# Keep the capacity to add another animal
 class Animal(ABC):
     """
     Classe décrivant les comportement par défaut des animaux. Peut-être 

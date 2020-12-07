@@ -15,7 +15,7 @@ class InsectesUI(QtWidgets.QMainWindow):
         
         self.ecosys = None
 
-        pixmap = QtGui.QPixmap("arrierPlan.png")
+        pixmap = QtGui.QPixmap("arrierPlan1.png")
         pal = QtGui.QPalette()
         pal.setBrush(QtGui.QPalette.Background, QtGui.QBrush(pixmap))
         self.ui.conteneur.lower()
