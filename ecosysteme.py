@@ -15,13 +15,16 @@ class Ecosysteme(list):
     Classe gérant le déroulement du jeu. 
     """
     def __init__(self, nb_ins, nbt, nbNour, xmax, ymax):
+
+
         self.__xmax = xmax
         self.__ymax = ymax
         self.__plateau = []
         self.list_nour = []
+        self.list_nour_name = []
         for i in range(xmax):
             self.__plateau.append([0]*ymax)
-        self.nbtour =  nbt
+        self.nbtour = nbt
         for i in range(nb_ins):
             self.append(Fourmi(randint(0, xmax), randint(0, ymax), self))
         if nbNour>xmax*ymax:
@@ -29,12 +32,16 @@ class Ecosysteme(list):
         else:
             x = randint(xmax)
             y = randint(ymax)
+            liste_name = ["Nourriture0.png","Nourriture1.png","Nourriture2.png","Nourriture3.png"]
             for i in range(nbNour):
+                r = int(np.random.randint(0, 4, 1))
                 while self.case(x,y) == 1:
                     x = randint(xmax)
                     y = randint(ymax)
                 self.__plateau[x][y] = 1
                 self.list_nour.append((x,y))
+                self.list_nour_name.append(liste_name[r])
+
 
     @property
     def dims(self):
@@ -90,7 +97,8 @@ class Ecosysteme(list):
             if ins.sante==0:
                 morts.append(ins)
         for ins in morts:
-            self.remove(ins)
+            ins.mort = True
+            # self.remove(ins)
             
     def simuler (self):
         """
@@ -105,20 +113,22 @@ class Ecosysteme(list):
         -------
         Rien  
         """
+
+
         liste_cig = []
         liste_fou = []
-        for t in range(self.nbtour):
-            print("### Tour %i ###"%(t))
-            self.unTour()
-            #print(self)
-            nbc, nbf = self.nbs()
-            print("Cigales {}\tFourmis {}\t".format(nbc, nbf))
+        # for t in range(self.nbtour):
+        #     print("### Tour %i ###"%(t))
+        #     self.unTour()
+        #     #print(self)
+        #     nbc, nbf = self.nbs()
+            # print("Cigales {}\tFourmis {}\t".format(nbc, nbf))
 
 
 
 if __name__ == "__main__":
     nbins = 300
-    nbtour = 150
-    ecosys = Ecosysteme(nbins,nbtour,80,30,40)
+    nbtour = 550
+    ecosys = Ecosysteme(nbins,nbtour,80,30,40) #(self, nb_ins, nbt, nbNour, xmax, ymax)
     print(ecosys)
     ecosys.simuler()

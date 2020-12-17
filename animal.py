@@ -21,7 +21,7 @@ class Animal(ABC):
     utilisée en l'état ou sous classée pour définir des comportements de
     déplacement différents.
     """
-    def __init__(self, abscisse, ordonnee, eco, capacite=20):
+    def __init__(self, abscisse, ordonnee, eco, capacite=30):
         """
         Crée un animal aux coordonnées désirées.
         
@@ -33,11 +33,21 @@ class Animal(ABC):
         capacité: int
             niveau de santé maximal de l'animal. Vaut 10 par défaut.
         """
-        
+        L = ['Fourmi0.png', 'Fourmi1.png', 'Fourmi2.png', 'Fourmi3.png']
+        np.random.shuffle(L)
+        self.image_name = L
+        self.index_img = 0
+
         self.__sante = randint(capacite//2, capacite)
         self._max = capacite
         self._eco = eco
         self.coords = abscisse, ordonnee
+
+        self.mort = False
+
+        a, b, c, d = np.random.randint(1, 4, 4)
+        self.vect = [((-1) ** a) * b / np.sqrt(b ** 2 + d ** 2), ((-1) ** c) * d / np.sqrt(b ** 2 + d ** 2)] # direction de son mvt
+
 
     def __str__(self):
         """
@@ -52,10 +62,11 @@ class Animal(ABC):
         s: str
             La chaîne de caractères qui sera affichée via ''print''
         """
-        return "%c : position (%i, %i) etat %i/%i"%(
-            self.car(), self.x, self.y,
-            self.sante, self._max
-            )
+
+        # return "%c : position (%i, %i) etat %i/%i"%(
+        #     self.car(), self.x, self.y,
+        #     self.sante, self._max
+        #     )
     
     def car(self):
         """
@@ -78,11 +89,28 @@ class Animal(ABC):
         sur une case de nourriture. Il affiche "Je meurs de faim" si sa
         sante est à 0.
         """
+        # print("on est la")
         self.sante -= 1
-        if self._eco.case(self.x, self.y)==1:
-            self.sante = self._max
+
+        L = self._eco.list_nour
+        L1 = self._eco.list_nour_name
+        l = []
+        l1 = []
+        dist = 20
+        for k in range(len(L)):
+            val = L[k]
+            if (abs(self.x - val[0]) < dist) and (abs(self.y - val[1]) < dist):
+                self.sante = self._max
+
+            else:
+                l.append(val)
+                l1.append(L1[k])
+        self._eco.list_nour_name = l1
+        self._eco.list_nour = l
+
         if self.sante<0:
-            print(str(self)+". Je meurs de faim")
+            self.mort = True
+        #     print(str(self)+". Je meurs de faim")
 
     @abstractmethod
     def bouger(self):
@@ -90,10 +118,26 @@ class Animal(ABC):
         À instancier dans les classes filles
         """
         ...
+    def chgt_direction(self):
+        """
+        On simule l'évolution de sa trajectoire
+        """
+        a = self.vect[0] + np.random.randint(1,2,1)/10
+        b = self.vect[1] + np.random.randint(1,2,1)/10
+        self.vect = [a/np.sqrt(a**2 + b**2),b/np.sqrt(a**2 + b**2)]
 
-    def mouvAlea(self):
-        self.coords = (self.x+randint(-3,4),
-                       self.y+randint(-3,4))
+
+
+    def mouvAlea(self): # avec un pas de 2
+        # self.coords = (self.x+randint(-3,4),
+        #                self.y+randint(-3,4))
+
+
+        self.chgt_direction()
+        pas = 4
+        self.coords = (int(self.x + self.vect[0]*pas)
+                       ,int(self.y + self.vect[1]*pas))
+
 
     def mouvNour(self):
         v, xmin, ymin = self._eco.vue(self.x, self.y, 20)
@@ -113,7 +157,7 @@ class Animal(ABC):
             objx, objy = liste_nour[0][1:]
             self.coords = (self.x + sign(objx-self.x),
                            self.y + sign(objy-self.y))
-        
+
     @property
     def coords(self):
         """
@@ -183,7 +227,10 @@ class Fourmi(Animal):
         sante>=3. Essaye de se rapprocher d'une case vers une réserve de
         nourriture sinon.
         """
-        if self.sante>=4:
-            self.mouvAlea()
-        else:
-            self.mouvNour()
+        if self.mort != True:
+
+            if self.sante>=4:
+                self.mouvAlea()
+            else:
+                self.mouvNour()
+

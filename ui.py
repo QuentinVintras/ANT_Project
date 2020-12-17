@@ -3,6 +3,11 @@ import sys
 from ecosysteme import *
 from random import shuffle
 from PyQt5 import  QtGui, QtCore, QtWidgets, uic
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+
+
 
 class InsectesUI(QtWidgets.QMainWindow):
     def __init__(self, nb_ins, nb_tour, nb_nour, *args):
@@ -64,7 +69,7 @@ class InsectesUI(QtWidgets.QMainWindow):
             On laisse l'interface faire pour nous les appels
             a un_pas()
         """
-        self.timer.start(500) # un tick toutes les 500 ms
+        self.timer.start(100) # un tick toutes les 100 ms
 
     def generer(self):
         if self.timer.isActive:
@@ -98,17 +103,25 @@ class InsectesUI(QtWidgets.QMainWindow):
         # boucle pour parcourir les insectes et gérer les images (vu ci-dessus) 
         for ins in self.ecosys:
             cls_name = ins.__class__.__name__
-            if cls_name not in self.img_dict:
-                # il faut avoir dans le répertoire les images qui portent le nom
-                # de la classe
-                self.img_dict[cls_name] = QtGui.QImage(cls_name+".png")
-            img = self.img_dict[cls_name]
 
+            img = QtGui.QImage(ins.image_name[ins.index_img])
+            ins.index_img += 1
+            if ins.index_img == 3:  # on remet a zéro l'index
+                ins.index_img = 0
             # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
-            qp.drawImage(ins.x,ins.y, img)
-        for food in self.ecosys.list_nour:
-            x,y = food
-            qp.drawImage(x,y,QtGui.QImage("Nourriture1.png"))
+            if ins.mort == True:
+                img = QtGui.QImage("tombeu.png")
+
+            qp.drawImage(ins.x - 20, ins.y - 20,img)
+            # qp.drawImage(ins.x - 20, ins.y - 20, QtGui.QImage(ins.image[ins.index_img]))
+
+
+        for k in range(len(self.ecosys.list_nour)):
+            x,y = self.ecosys.list_nour[k]
+            # print(self.ecosys.list_nour_name[k])
+            image = QtGui.QImage(self.ecosys.list_nour_name[k])
+            qp.drawImage(x, y, image)
+            
         # on informe le peintre qu'on a fini
         self.painter.end()
 
@@ -117,6 +130,6 @@ class InsectesUI(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = InsectesUI(50, 20, 30)
+    window = InsectesUI(100, 20, 30) # nb_ins, nb_tour, nb_nour,
     window.show()
     sys.exit(app.exec_())
