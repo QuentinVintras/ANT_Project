@@ -16,7 +16,9 @@ class InsectesUI(QtWidgets.QMainWindow):
         self.nb_nour = nb_nour
         QtWidgets.QMainWindow.__init__(self, *args)
         self.ui = uic.loadUi('interface.ui', self)
-        self.ui.bouton_gen.clicked.connect(self.generer) 
+        self.ui.bouton_gen.clicked.connect(self.generer)
+
+
         
         self.ecosys = None
 
@@ -44,6 +46,10 @@ class InsectesUI(QtWidgets.QMainWindow):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.un_pas)
         self.generer()
+
+
+    def ant_num_change(self):
+        self.nb_ins = self.ui.ant_num.value()
         
     def un_pas(self):
         if self.ecosys.nbtour > 0:
@@ -72,6 +78,11 @@ class InsectesUI(QtWidgets.QMainWindow):
         self.timer.start(100) # un tick toutes les 100 ms
 
     def generer(self):
+        self.nb_tours = self.ui.nb_turns.value()
+        self.nb_ins = self.ui.ant_num.value()
+        self.nb_nour = self.ui.food_num.value()
+
+
         if self.timer.isActive:
             self.timer.stop()
         self.ecosys = Ecosysteme(self.nb_ins, self.nb_tours,
@@ -130,6 +141,6 @@ class InsectesUI(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = InsectesUI(30, 20, 30) # nb_ins, nb_tour, nb_nour,
+    window = InsectesUI(30, 20, 60) # nb_ins, nb_tour, nb_nour,
     window.show()
     sys.exit(app.exec_())
