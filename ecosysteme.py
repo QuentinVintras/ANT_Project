@@ -22,6 +22,7 @@ class Ecosysteme(list):
         self.__plateau = []
         self.list_nour = []
         self.list_nour_name = []
+        self.dead = 0
         for i in range(xmax):
             self.__plateau.append([0]*ymax)
         self.nbtour = nbt
@@ -98,6 +99,7 @@ class Ecosysteme(list):
                 morts.append(ins)
         for ins in morts:
             ins.mort = True
+            self.dead += 1
             # self.remove(ins)
             
     def simuler (self):

@@ -47,6 +47,9 @@ class InsectesUI(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.un_pas)
         self.generer()
 
+        #affichage du nombre de fourmi morte et vivante
+        self.en_vie = self.nb_ins - self.ecosys.dead
+        self.morte = self.ecosys.dead
 
     def ant_num_change(self):
         self.nb_ins = self.ui.ant_num.value()
@@ -124,6 +127,13 @@ class InsectesUI(QtWidgets.QMainWindow):
                 img = QtGui.QImage("tombeu.png")
 
             qp.drawImage(ins.x - 20, ins.y - 20,img)
+            qp.drawText(ins.x - 20, ins.y - 20,str(max(ins.sante,0)))
+            self.en_vie = self.nb_ins - self.ecosys.dead
+            self.morte = self.ecosys.dead
+
+            self.ui.vie.display(self.en_vie)
+            self.ui.morte_ui.display(self.morte)
+
             # qp.drawImage(ins.x - 20, ins.y - 20, QtGui.QImage(ins.image[ins.index_img]))
 
 
