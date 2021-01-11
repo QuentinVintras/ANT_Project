@@ -130,6 +130,6 @@ class InsectesUI(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = InsectesUI(100, 20, 30) # nb_ins, nb_tour, nb_nour,
+    window = InsectesUI(30, 20, 30) # nb_ins, nb_tour, nb_nour,
     window.show()
     sys.exit(app.exec_())
