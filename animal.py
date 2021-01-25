@@ -21,7 +21,7 @@ class Animal(ABC):
     utilisée en l'état ou sous classée pour définir des comportements de
     déplacement différents.
     """
-    def __init__(self, abscisse, ordonnee, eco, capacite=30):
+    def __init__(self, abscisse, ordonnee, eco, capacity=30):
         """
         Crée un animal aux coordonnées désirées.
         
@@ -38,12 +38,12 @@ class Animal(ABC):
         self.image_name = L
         self.index_img = 0
 
-        self.__sante = randint(capacite//2, capacite)
-        self._max = capacite
+        self.__health = randint(capacity//2, capacity)
+        self._max = capacity
         self._eco = eco
         self.coords = abscisse, ordonnee
 
-        self.mort = False
+        self.dead = False
 
         a, b, c, d = np.random.randint(1, 4, 4)
         self.vect = [((-1) ** a) * b / np.sqrt(b ** 2 + d ** 2), ((-1) ** c) * d / np.sqrt(b ** 2 + d ** 2)] # direction de son mvt
@@ -65,7 +65,7 @@ class Animal(ABC):
 
         # return "%c : position (%i, %i) etat %i/%i"%(
         #     self.car(), self.x, self.y,
-        #     self.sante, self._max
+        #     self.health, self._max
         #     )
     
     def car(self):
@@ -83,41 +83,49 @@ class Animal(ABC):
         """
         return 'A'    
 
-    def manger(self):
+    def eat(self):
         """
-        L'animal perd un niveau de sante, puis se nourrit s'il se trouve
-        sur une case de nourriture. Il affiche "Je meurs de faim" si sa
-        sante est à 0.
+        L'animal perd un niveau de health, puis se foodrit s'il se trouve
+        sur une case de foodriture. Il affiche "Je meurs de faim" si sa
+        health est à 0.
         """
         # print("on est la")
-        self.sante -= 1
+        self.health -= 1
 
-        L = self._eco.list_nour
-        L1 = self._eco.list_nour_name
+        L = self._eco.list_food
+        L1 = self._eco.list_food_name
         l = []
         l1 = []
         dist = 20
         for k in range(len(L)):
             val = L[k]
             if (abs(self.x - val[0]) < dist) and (abs(self.y - val[1]) < dist):
-                self.sante = self._max
+                self.health = self._max
 
             else:
                 l.append(val)
                 l1.append(L1[k])
-        self._eco.list_nour_name = l1
-        self._eco.list_nour = l
+        self._eco.list_food_name = l1
+        self._eco.list_food = l
 
-        if self.sante<0:
-            self.mort = True
+        if self.health<0:
+            self.dead = True
         #     print(str(self)+". Je meurs de faim")
 
-    @abstractmethod
     def bouger(self):
         """
-        À instancier dans les classes filles
+        Effectue un mouvement aléatoire (défini dans la superclasse) si 
+        health>=3. Essaye de se rapprocher d'une case vers une réserve de
+        foodriture sinon.
         """
-        ...
+        if self.dead != True:
+
+            if self.health>=15:
+                self.mouvAlea()
+            else:
+                self.mouvfood()
+
+
     def chgt_direction(self):
         """
         On simule l'évolution de sa trajectoire
@@ -128,33 +136,33 @@ class Animal(ABC):
 
 
 
-    def mouvAlea(self): # avec un pas de 2
+    def mouvAlea(self): # avec un step de 2
         # self.coords = (self.x+randint(-3,4),
         #                self.y+randint(-3,4))
 
 
         self.chgt_direction()
-        pas = 4
-        self.coords = (int(self.x + self.vect[0]*pas)
-                       ,int(self.y + self.vect[1]*pas))
+        step = 4
+        self.coords = (int(self.x + self.vect[0]*step)
+                       ,int(self.y + self.vect[1]*step))
 
 
-    def mouvNour(self):
+    def mouvfood(self):
         v, xmin, ymin = self._eco.vue(self.x, self.y, 20)
-        liste_nour = []
+        liste_food = []
         for i in range(len(v)):
             for j in range(len(v[0])):
                 if v[i][j] == 1:
                     cx = i+xmin
                     cy = j+ymin
                     d = max(abs(cx-self.x), abs(cy-self.y))
-                    liste_nour.append((d, cx, cy))
-        if liste_nour == []:
+                    liste_food.append((d, cx, cy))
+        if liste_food == []:
             self.mouvAlea()
         else:
-            np.random.shuffle(liste_nour)
-            liste_nour.sort()
-            objx, objy = liste_nour[0][1:]
+            np.random.shuffle(liste_food)
+            liste_food.sort()
+            objx, objy = liste_food[0][1:]
             self.coords = (self.x + sign(objx-self.x),
                            self.y + sign(objy-self.y))
 
@@ -201,36 +209,23 @@ class Animal(ABC):
         self.__coords = (x, y)
 
     @property
-    def sante(self):
+    def health(self):
         """
-        sante: float
+        health: float
             Le niveau de santé de l'animal. Si ce niveau arrive à 0 l'animal
-            est marqué comme mort et sera retiré du plateau
+            est marqué comme dead et sera retiré du plateau
         """
-        return self.__sante
+        return self.__health
     
-    @sante.setter
-    def sante(self, value):
+    @health.setter
+    def health(self, value):
         if value <= self._max:
-            self.__sante = value
+            self.__health = value
         if value <= 0:  # <= car certaines cases enlèvent plus de 1 en santé
             value = 0   # ce qui gèrera les décès plus tard
 
 
-class Fourmi(Animal):
+class Ant(Animal):
     def car(self):
         return 'F'
-        
-    def bouger(self):
-        """
-        Effectue un mouvement aléatoire (défini dans la superclasse) si 
-        sante>=3. Essaye de se rapprocher d'une case vers une réserve de
-        nourriture sinon.
-        """
-        if self.mort != True:
-
-            if self.sante>=4:
-                self.mouvAlea()
-            else:
-                self.mouvNour()
 

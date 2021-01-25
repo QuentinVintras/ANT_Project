@@ -10,10 +10,10 @@ from PyQt5.QtCore import *
 
 
 class InsectesUI(QtWidgets.QMainWindow):
-    def __init__(self, nb_ins, nb_tour, nb_nour, *args):
+    def __init__(self, nb_ins, nb_tour, nb_food, *args):
         self.nb_tours = nb_tour
         self.nb_ins = nb_ins
-        self.nb_nour = nb_nour
+        self.nb_food = nb_food
         QtWidgets.QMainWindow.__init__(self, *args)
         self.ui = uic.loadUi('interface.ui', self)
         self.ui.bouton_gen.clicked.connect(self.generer)
@@ -39,7 +39,7 @@ class InsectesUI(QtWidgets.QMainWindow):
         # fonction draw_ecosys
         self.ui.conteneur.paintEvent = self.draw_ecosys
         self.ui.bouton_pas.clicked.connect(self.un_pas) 
-        self.ui.bouton_sim.clicked.connect(self.simuler_timer)
+        self.ui.bouton_sim.clicked.connect(self.simulate_timer)
 
         
         #timer pour le bouton simuler
@@ -47,7 +47,7 @@ class InsectesUI(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.un_pas)
         self.generer()
 
-        #affichage du nombre de fourmi morte et vivante
+        #affichage du nombre de fourmi mortes et vivante
         self.en_vie = self.nb_ins - self.ecosys.dead
         self.morte = self.ecosys.dead
 
@@ -65,7 +65,7 @@ class InsectesUI(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.question(self, 'Attention !',
                             'Le nombre de tours est épuisé',
                             QtWidgets.QMessageBox.Ok)
-    def simuler(self):
+    def simulate(self):
         """
             Approche bourrin, mieux vaut eviter sinon on peut
             bloquer l'interface graphique
@@ -73,7 +73,7 @@ class InsectesUI(QtWidgets.QMainWindow):
         while self.ecosys.nbtour > 0:
             self.un_pas()
     
-    def simuler_timer(self):
+    def simulate_timer(self):
         """
             On laisse l'interface faire pour nous les appels
             a un_pas()
@@ -83,13 +83,13 @@ class InsectesUI(QtWidgets.QMainWindow):
     def generer(self):
         self.nb_tours = self.ui.nb_turns.value()
         self.nb_ins = self.ui.ant_num.value()
-        self.nb_nour = self.ui.food_num.value()
+        self.nb_food = self.ui.food_num.value()
 
 
         if self.timer.isActive:
             self.timer.stop()
         self.ecosys = Ecosysteme(self.nb_ins, self.nb_tours,
-                                    self.nb_nour,
+                                    self.nb_food,
                                     self.ui.conteneur.width(),
                                     self.ui.conteneur.height()
                                     )
@@ -123,11 +123,11 @@ class InsectesUI(QtWidgets.QMainWindow):
             if ins.index_img == 3:  # on remet a zéro l'index
                 ins.index_img = 0
             # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
-            if ins.mort == True:
+            if ins.dead == True:
                 img = QtGui.QImage("tombeu.png")
 
             qp.drawImage(ins.x - 20, ins.y - 20,img)
-            qp.drawText(ins.x - 20, ins.y - 20,str(max(ins.sante,0)))
+            qp.drawText(ins.x - 20, ins.y - 20,str(max(ins.health,0)))
             self.en_vie = self.nb_ins - self.ecosys.dead
             self.morte = self.ecosys.dead
 
@@ -137,10 +137,10 @@ class InsectesUI(QtWidgets.QMainWindow):
             # qp.drawImage(ins.x - 20, ins.y - 20, QtGui.QImage(ins.image[ins.index_img]))
 
 
-        for k in range(len(self.ecosys.list_nour)):
-            x,y = self.ecosys.list_nour[k]
-            # print(self.ecosys.list_nour_name[k])
-            image = QtGui.QImage(self.ecosys.list_nour_name[k])
+        for k in range(len(self.ecosys.list_food)):
+            x,y = self.ecosys.list_food[k]
+            # print(self.ecosys.list_food_name[k])
+            image = QtGui.QImage(self.ecosys.list_food_name[k])
             qp.drawImage(x, y, image)
             
         # on informe le peintre qu'on a fini
@@ -151,6 +151,6 @@ class InsectesUI(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = InsectesUI(30, 20, 60) # nb_ins, nb_tour, nb_nour,
+    window = InsectesUI(30, 20, 60) # nb_ins, nb_tour, nb_food,
     window.show()
     sys.exit(app.exec_())

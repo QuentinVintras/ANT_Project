@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import randint
 import time
 import matplotlib.pyplot as plt
-from animal import Fourmi
+from animal import Ant
 
 """
 Ce module contient la définition de la classe principale servant à gérer le jeu
@@ -14,34 +14,34 @@ class Ecosysteme(list):
     """
     Classe gérant le déroulement du jeu. 
     """
-    def __init__(self, nb_ins, nbt, nbNour, xmax, ymax):
+    def __init__(self, nb_ins, nbt, nbfood, xmax, ymax):
 
 
         self.__xmax = xmax
         self.__ymax = ymax
         self.__plateau = []
-        self.list_nour = []
-        self.list_nour_name = []
+        self.list_food = []
+        self.list_food_name = []
         self.dead = 0
         for i in range(xmax):
             self.__plateau.append([0]*ymax)
         self.nbtour = nbt
         for i in range(nb_ins):
-            self.append(Fourmi(randint(0, xmax), randint(0, ymax), self))
-        if nbNour>xmax*ymax:
-            raise(ValueError("Trop de nourriture"))
+            self.append(Ant(randint(0, xmax), randint(0, ymax), self))
+        if nbfood>xmax*ymax:
+            raise(ValueError("Too much food"))
         else:
             x = randint(xmax)
             y = randint(ymax)
-            liste_name = ["Nourriture0.png","Nourriture1.png","Nourriture2.png","Nourriture3.png"]
-            for i in range(nbNour):
+            liste_name = ["food0.png","food1.png","food2.png","food3.png"]
+            for i in range(nbfood):
                 r = int(np.random.randint(0, 4, 1))
                 while self.case(x,y) == 1:
                     x = randint(xmax)
                     y = randint(ymax)
                 self.__plateau[x][y] = 1
-                self.list_nour.append((x,y))
-                self.list_nour_name.append(liste_name[r])
+                self.list_food.append((x,y))
+                self.list_food_name.append(liste_name[r])
 
 
     @property
@@ -89,48 +89,25 @@ class Ecosysteme(list):
         """
         for ins in self:  # fonctionne car Ecosysteme descend de list
             ins.bouger()
-            ins.manger()
+            ins.eat()
         self.enterrer()
 
     def enterrer(self):
-        morts = []
+        deads = []
         for ins in self:
-            if ins.sante==0:
-                morts.append(ins)
-        for ins in morts:
-            ins.mort = True
+            if ins.health==0:
+                deads.append(ins)
+        for ins in deads:
+            ins.dead = True
             self.dead += 1
             # self.remove(ins)
             
-    def simuler (self):
-        """
-        Contrôle l'évolution du jeu, affiche le résultat de chaque tour dans
-        un terminal.
-        
-        Paramètres
-        ----------
-        Aucun
-
-        Renvoie
-        -------
-        Rien  
-        """
-
-
-        liste_cig = []
-        liste_fou = []
-        # for t in range(self.nbtour):
-        #     print("### Tour %i ###"%(t))
-        #     self.unTour()
-        #     #print(self)
-        #     nbc, nbf = self.nbs()
-            # print("Cigales {}\tFourmis {}\t".format(nbc, nbf))
 
 
 
 if __name__ == "__main__":
     nbins = 300
     nbtour = 550
-    ecosys = Ecosysteme(nbins,nbtour,80,30,40) #(self, nb_ins, nbt, nbNour, xmax, ymax)
+    ecosys = Ecosysteme(nbins,nbtour,80,30,40) #(self, nb_ins, nbt, nbfood, xmax, ymax)
     print(ecosys)
     ecosys.simuler()
