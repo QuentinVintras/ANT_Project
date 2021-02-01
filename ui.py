@@ -62,8 +62,8 @@ class InsectesUI(QtWidgets.QMainWindow):
         else:
             if self.timer.isActive:
                 self.timer.stop()
-            QtWidgets.QMessageBox.question(self, 'Attention !',
-                            'Le nombre de tours est épuisé',
+            QtWidgets.QMessageBox.question(self, 'Beware !',
+                            'You have reached the selected number of turn',
                             QtWidgets.QMessageBox.Ok)
     def simulate(self):
         """
