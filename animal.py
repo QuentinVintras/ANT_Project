@@ -33,7 +33,7 @@ class Animal(ABC):
         capacité: int
             niveau de santé maximal de l'animal. Vaut 10 par défaut.
         """
-        L = ['Fourmi0.png', 'Fourmi1.png', 'Fourmi2.png', 'Fourmi3.png']
+        L = ['Image/Fourmi0.png', 'Image/Fourmi1.png', 'Image/Fourmi2.png', 'Image/Fourmi3.png']
         np.random.shuffle(L)
         self.image_name = L
         self.index_img = 0

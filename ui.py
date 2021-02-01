@@ -22,7 +22,7 @@ class InsectesUI(QtWidgets.QMainWindow):
         
         self.ecosys = None
 
-        pixmap = QtGui.QPixmap("arrierPlan1.png")
+        pixmap = QtGui.QPixmap("Image/arrierPlan1.png")
         pal = QtGui.QPalette()
         pal.setBrush(QtGui.QPalette.Background, QtGui.QBrush(pixmap))
         self.ui.conteneur.lower()
@@ -124,9 +124,9 @@ class InsectesUI(QtWidgets.QMainWindow):
                     ins.index_img = 0
                 # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
             elif cls_name == "BigAnt":
-                img = QtGui.QImage("BigFourmi.png")
+                img = QtGui.QImage("Image/BigFourmi.png")
             if ins.dead == True:
-                img = QtGui.QImage("tombeu.png")
+                img = QtGui.QImage("Image/tombeu.png")
 
             qp.drawImage(ins.x - 20, ins.y - 20,img)
             qp.drawText(ins.x - 20, ins.y - 20,str(max(ins.health,0)))

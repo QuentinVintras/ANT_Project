@@ -36,7 +36,7 @@ class Ecosysteme(list):
         else:
             x = randint(xmax)
             y = randint(ymax)
-            liste_name = ["food0.png","food1.png","food2.png","food3.png"]
+            liste_name = ["Image/food0.png","Image/food1.png","Image/food2.png","Image/food3.png"]
             for i in range(nbfood):
                 r = int(np.random.randint(0, 4, 1))
                 while self.case(x,y) == 1:
