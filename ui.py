@@ -117,12 +117,14 @@ class InsectesUI(QtWidgets.QMainWindow):
         # boucle pour parcourir les insectes et gérer les images (vu ci-dessus) 
         for ins in self.ecosys:
             cls_name = ins.__class__.__name__
-
-            img = QtGui.QImage(ins.image_name[ins.index_img])
-            ins.index_img += 1
-            if ins.index_img == 3:  # on remet a zéro l'index
-                ins.index_img = 0
-            # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
+            if cls_name == "Ant":
+                img = QtGui.QImage(ins.image_name[ins.index_img])
+                ins.index_img += 1
+                if ins.index_img == 3:  # on remet a zéro l'index
+                    ins.index_img = 0
+                # on demande au peintre d'afficher l'image aux coordonnées de l'insecte
+            elif cls_name == "BigAnt":
+                img = QtGui.QImage("BigFourmi.png")
             if ins.dead == True:
                 img = QtGui.QImage("tombeu.png")
 

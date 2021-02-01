@@ -229,3 +229,13 @@ class Ant(Animal):
     def car(self):
         return 'F'
 
+class BigAnt(Animal):
+
+    def __init__(self,abscisse, ordonnee, eco, capacity=30):
+        super().__init__(abscisse, ordonnee, eco,capacity)
+        self.__health = randint(capacity*1.5,2* capacity)
+        self._max = 2*capacity
+
+    def car(self):
+        return 'B'
+

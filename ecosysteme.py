@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import randint
 import time
 import matplotlib.pyplot as plt
-from animal import Ant
+from animal import Ant,BigAnt
 
 """
 Ce module contient la définition de la classe principale servant à gérer le jeu
@@ -27,7 +27,10 @@ class Ecosysteme(list):
             self.__plateau.append([0]*ymax)
         self.nbtour = nbt
         for i in range(nb_ins):
-            self.append(Ant(randint(0, xmax), randint(0, ymax), self))
+            if np.random.rand() < 0.8 :
+                self.append(Ant(randint(0, xmax), randint(0, ymax), self))
+            else :
+                self.append(BigAnt(randint(0, xmax), randint(0, ymax), self))
         if nbfood>xmax*ymax:
             raise(ValueError("Too much food"))
         else:
